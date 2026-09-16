@@ -1,0 +1,21 @@
+"""BOSSMEN WENBIGO configuration."""
+GAME_TITLE="BOSSMEN WENBIGO"
+GAME_SUBTITLE="AI QUICK-DRAW DUEL"
+VERSION="v0.2 - THE DUEL HAS SOUND"
+AUDIO=True
+DIALOGUE=True
+ANNOUNCER=True
+WINS_TO_TAKE_MATCH=3
+MAX_ROUNDS=9
+DRAW_DELAY_MIN=1.5
+DRAW_DELAY_MAX=4.0
+TICK_INTERVAL=0.5
+SHOT_FLASH_HOLD=0.35
+RESULT_HOLD=3.5
+TIE_TOLERANCE_MS=5.0
+DOUBLE_FS_REPLAY=True
+LABEL_INSANE_MAX_MS=100.0
+LABEL_FAST_MAX_MS=130.0
+LABEL_NORMAL_MAX_MS=170.0
+BLOON={"name":"BLOON","tagline":"fast but wild","base_rt":0.135,"variance":0.025,"false_start_prob":0.02,"lapse_chance":0.12,"lapse_range":(0.03,0.09),"rt_clamp":(0.085,0.35)}
+QWENY={"name":"QWENY","tagline":"slow but steady","base_rt":0.125,"variance":0.010,"false_start_prob":0.01,"lapse_chance":0.05,"lapse_range":(0.02,0.06),"rt_clamp":(0.09,0.28)}
