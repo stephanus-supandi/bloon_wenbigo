@@ -1,7 +1,7 @@
 # 🤠 BOSSMEN WENBIGO v0.2
 ### AI QUICK-DRAW DUEL — THE DUEL HAS SOUND
 
-![BOSSMEN WENBIGO](bossmen_wenbigo.png)
+![BOSSMEN WENBIGO](bossmen_wenbigo.svg)
 
 > **Two AI cowboys. One signal. Who draws first?**
 
@@ -11,21 +11,11 @@ This is **computer vs computer**. You just watch the algorithms argue with bulle
 
 ## v0.2 — The Duel Has Sound
 
-The v0.2 build adds:
+The v0.2 build adds sound events, deterministic character dialogue, optional announcer lines, western terminal presentation, reaction-time visualization, match statistics, and tests.
 
-- 🔊 Event-driven sound effects
-- 💬 Local deterministic character dialogue
-- 🎙️ Optional announcer lines
-- 🤠 Western terminal presentation
-- ⏱️ Measured reaction-time display
-- 📊 Match statistics
-- 🧪 Acceptance tests
-
-Audio is optional. On Windows the standard-library `winsound` backend is available; on POSIX systems the terminal bell remains the fallback. An optional `pygame` backend can provide synthesized/custom sound effects.
+Audio is optional. On Windows the standard-library `winsound` backend is available; on POSIX systems the terminal bell remains the fallback. An optional `pygame` backend can provide richer synthesized/custom effects.
 
 ## Gameplay
-
-A round follows the sequence:
 
 ```text
 READY
@@ -41,29 +31,17 @@ REACTION TIME
 RESULT
 ```
 
-Matches are **best of 5**, first to 3 wins. A very close reaction-time result can be declared a draw, and a double false-start creates a void round and replay.
+Matches are **best of 5**, first to 3 wins. Close reaction times can produce a draw; a double false-start creates a void round and replay.
 
 ## The Gunslingers
 
 ### BLOON
-
-**Fast but wild.**
-
-- Base reaction: 135 ms
-- Variance: 25 ms
-- False-start probability: 2%
-- Lapse chance: 12%
+**Fast but wild.** Base reaction 135 ms, variance 25 ms, false-start probability 2%, lapse chance 12%.
 
 ### QWENY
+**Slow but steady.** Base reaction 125 ms, variance 10 ms, false-start probability 1%, lapse chance 5%.
 
-**Slow but steady.**
-
-- Base reaction: 125 ms
-- Variance: 10 ms
-- False-start probability: 1%
-- Lapse chance: 5%
-
-The reaction model is a **game simulation**, not a model of human neuroscience or machine cognition.
+These are game models, not neuroscience or claims about machine cognition.
 
 ## Timing
 
@@ -73,13 +51,7 @@ The timing core uses Python's monotonic high-resolution timer:
 time.perf_counter()
 ```
 
-The game stamps `t0` at the draw signal, then records the elapsed time when each AI fires:
-
-```text
-reaction_time = shot_time - t0
-```
-
-The displayed milliseconds are derived from the measured elapsed time, not simply copied from the AI's planned reaction value.
+The duel stamps `t0` at the draw signal and measures elapsed time when each AI fires. The displayed milliseconds come from that measured elapsed time.
 
 ## Project Structure
 
@@ -96,12 +68,12 @@ bloon_wenbigo/
 ├── stats.py
 ├── tests.py
 ├── README.md
-└── bossmen_wenbigo.png
+└── bossmen_wenbigo.svg
 ```
 
 ## Run
 
-Python 3.8+ is sufficient for the core game. No external package is required for the fallback audio path.
+Python 3.8+ is sufficient for the core game.
 
 ```bash
 python main.py
@@ -123,16 +95,7 @@ pip install pygame-ce
 
 ## Configuration
 
-All main gameplay parameters live in `config.py`, including:
-
-- audio on/off
-- dialogue on/off
-- announcer on/off
-- draw-delay range
-- AI reaction parameters
-- tie tolerance
-- match length
-- result pacing
+Main gameplay parameters live in `config.py`: audio, dialogue, announcer, draw-delay range, AI personality parameters, tie tolerance, match length, and pacing.
 
 ## Philosophy
 
