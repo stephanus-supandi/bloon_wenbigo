@@ -1,7 +1,7 @@
 # 🤠 BOSSMEN WENBIGO v0.2
 ### AI QUICK-DRAW DUEL — THE DUEL HAS SOUND
 
-![BOSSMEN WENBIGO](bossmen_wenbigo.svg)
+![BOSSMEN WENBIGO](bossmen_wenbigo.png)
 
 > **Two AI cowboys. One signal. Who draws first?**
 
