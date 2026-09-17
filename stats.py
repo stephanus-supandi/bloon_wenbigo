@@ -1,16 +1,66 @@
-from typing import List,Optional
+"""Per-match statistics tracking."""
+
+from typing import List, Optional
+
 class AIStats:
-    def __init__(self,name:str): self.name=name; self.wins=0; self.losses=0; self.draws=0; self.false_starts=0; self.reactions=[]
-    def record_shot(self,v:float): self.reactions.append(v)
+    def __init__(self, name: str):
+        self.name = name
+        self.wins = 0
+        self.losses = 0
+        self.draws = 0
+        self.false_starts = 0
+        self.reactions: List[float] = []       # valid measured RTs (seconds)
+
+    def record_shot(self, measured_seconds: float) -> None:
+        self.reactions.append(measured_seconds)
+
     @property
-    def rounds_played(self): return self.wins+self.losses+self.draws
-    def avg_ms(self): return sum(self.reactions)/len(self.reactions)*1000 if self.reactions else None
-    def fastest_ms(self): return min(self.reactions)*1000 if self.reactions else None
-    def slowest_ms(self): return max(self.reactions)*1000 if self.reactions else None
+    def rounds_played(self) -> int:
+        return self.wins + self.losses + self.draws
+
+    def avg_ms(self) -> Optional[float]:
+        if not self.reactions:
+            return None
+        return sum(self.reactions) / len(self.reactions) * 1000.0
+
+    def fastest_ms(self) -> Optional[float]:
+        if not self.reactions:
+            return None
+        return min(self.reactions) * 1000.0
+
+    def slowest_ms(self) -> Optional[float]:
+        if not self.reactions:
+            return None
+        return max(self.reactions) * 1000.0
+
     @staticmethod
-    def fmt(v): return f'{v:6.0f} ms' if v is not None else '   ---   '
+    def _fmt(v: Optional[float]) -> str:
+        return f"{v:6.0f} ms" if v is not None else "   ---   "
+
 class MatchStats:
-    def __init__(self,left,right): self.left=left; self.right=right; self.rounds_completed=0; self.void_rounds=0
-    def summary_lines(self)->List[str]:
-        L,R=self.left,self.right
-        return ['---------------- STATISTICS ----------------',f"{'':10}{L.name:>12}{R.name:>12}",f"{'Rounds':10}{L.rounds_played:>12}{R.rounds_played:>12}",f"{'Wins':10}{L.wins:>12}{R.wins:>12}",f"{'Losses':10}{L.losses:>12}{R.losses:>12}",f"{'Draws':10}{L.draws:>12}{R.draws:>12}",f"{'False starts':10}{L.false_starts:>12}{R.false_starts:>12}",f"{'Avg RT':10}{self.fmt(L.avg_ms()):>12}{self.fmt(R.avg_ms()):>12}",f"{'Fastest':10}{self.fmt(L.fastest_ms()):>12}{self.fmt(R.fastest_ms()):>12}",f"{'Slowest':10}{self.fmt(L.slowest_ms()):>12}{self.fmt(R.slowest_ms()):>12}",f'Void rounds (double false start): {self.void_rounds}','---------------------------------------------']
+    def __init__(self, left: AIStats, right: AIStats):
+        self.left = left
+        self.right = right
+        self.rounds_completed = 0
+        self.void_rounds = 0
+
+    def summary_lines(self) -> List[str]:
+        L, R = self.left, self.right
+        lines = [
+            "---------------- STATISTICS ----------------",
+            f"{'':<12}{'BLOON':>10}{'QWENY':>12}",
+            f"{'Rounds':<12}{L.rounds_played:>10}{R.rounds_played:>12}",
+            f"{'Wins':<12}{L.wins:>10}{R.wins:>12}",
+            f"{'Losses':<12}{L.losses:>10}{R.losses:>12}",
+            f"{'Draws':<12}{L.draws:>10}{R.draws:>12}",
+            f"{'False starts':<12}{L.false_starts:>10}{R.false_starts:>12}",
+            f"{'Avg RT':<12}{AIStats._fmt(L.avg_ms()):>10}"
+            f"{AIStats._fmt(R.avg_ms()):>12}",
+            f"{'Fastest':<12}{AIStats._fmt(L.fastest_ms()):>10}"
+            f"{AIStats._fmt(R.fastest_ms()):>12}",
+            f"{'Slowest':<12}{AIStats._fmt(L.slowest_ms()):>10}"
+            f"{AIStats._fmt(R.slowest_ms()):>12}",
+            f"Void rounds (double false start): {self.void_rounds}",
+            "---------------------------------------------",
+        ]
+        return lines
